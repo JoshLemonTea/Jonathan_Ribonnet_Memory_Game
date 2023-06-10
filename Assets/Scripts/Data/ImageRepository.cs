@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,59 +6,50 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
+using Memory.Models; // Assuming 'DBImage' is defined in the 'Memory.Models' namespace
+
 
 namespace Memory.Data
 {
     class ImageRepository : Singleton<ImageRepository>
     {
-        // URL for retrieving memory images from the web service
-        string urlMemoryImages = "https://localhost:44314/api/Memory";
+        private MemoryContext dbContext; // Entity Framework DbContext
+
+        public ImageRepository()
+        {
+            dbContext = new MemoryContext();
+        }
 
         // Method for processing image IDs and invoking a callback action
         public void ProcessImageIds(Action<List<int>> processIds)
         {
-            StartCoroutine(GetImageIDs(processIds));
-        }
-
-        // Coroutine for retrieving image IDs from the web service
-        private IEnumerator GetImageIDs(Action<List<int>> processIds)
-        {
-            UnityWebRequest uwrids = UnityWebRequest.Get(urlMemoryImages);
-            yield return uwrids.SendWebRequest();
-
-            if (uwrids.result != UnityWebRequest.Result.Success)
-            {
-                Debug.Log("imageRepository.GetImageIDs : " + uwrids.error);
-            }
-            else
-            {
-                // Retrieve the response JSON and deserialize it into a list of DBImage objects
-                string json = uwrids.downloadHandler.text;
-                List<DBImage> images = JsonConvert.DeserializeObject<List<DBImage>>(json);
-
-                // Convert the list of DBImage objects into a list of image IDs
-                List<int> imageIds = images.Select(i => i.Id).ToList();
-
-                // Invoke the callback action with the processed image IDs
-                processIds(imageIds);
-            }
+            List<int> imageIds = dbContext.Images.Select(i => i.Id).ToList();
+            processIds(imageIds);
         }
 
         // Method for retrieving and processing a texture based on an image ID
         public void GetProcessTexture(int imgdbid, Action<Texture2D> processTexture)
         {
-            StartCoroutine(GetTextures(imgdbid, processTexture));
+            DBImage image = dbContext.Images.FirstOrDefault(i => i.Id == imgdbid);
+            if (image != null)
+            {
+                StartCoroutine(GetTextureFromURL(image.MemoryImageUrl, processTexture));
+            }
+            else
+            {
+                Debug.Log("Image not found in the database.");
+            }
         }
 
-        // Coroutine for retrieving a texture from the web service and invoking a callback action
-        private IEnumerator GetTextures(int imgdbid, Action<Texture2D> processTexture)
+        // Coroutine for retrieving a texture from a URL and invoking a callback action
+        private IEnumerator GetTextureFromURL(string url, Action<Texture2D> processTexture)
         {
-            UnityWebRequest uwr = UnityWebRequestTexture.GetTexture(urlMemoryImages + "/" + imgdbid);
+            UnityWebRequest uwr = UnityWebRequestTexture.GetTexture(url);
             yield return uwr.SendWebRequest();
 
             if (uwr.result != UnityWebRequest.Result.Success)
             {
-                Debug.Log("ImageRepository.GetProcessMaterials: " + uwr.error);
+                Debug.Log("ImageRepository.GetTextureFromURL: " + uwr.error);
             }
             else
             {
