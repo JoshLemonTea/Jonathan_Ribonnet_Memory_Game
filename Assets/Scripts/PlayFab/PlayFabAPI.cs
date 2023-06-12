@@ -5,19 +5,26 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEditor.PackageManager.Requests;
 using UnityEngine;
+using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
 
 public class PlayFabAPI : MonoBehaviour
-{
+{ 
+    public InputField emailInput; // Reference to the input field in the UI
     public string Email { get; set; } //bound to ifEmail
 
     #region register
 
-    public void Register() //bound to btnRegister
+
+
+    // Rest of the script...
+
+    public void Register()
     {
+        string email = emailInput.text; // Get the input value from the input field
         var request = new RegisterPlayFabUserRequest
         {
-            Email = Email.Trim(),
+            Email = email.Trim(),
             Username = "JDA",
             Password = "abc123",
             DisplayName = "IDB"
@@ -26,7 +33,11 @@ public class PlayFabAPI : MonoBehaviour
         PlayFabClientAPI.RegisterPlayFabUser(request, OnRegisterSuccess, OnRegisterFailure);
     }
 
-    private void OnRegisterSuccess(RegisterPlayFabUserResult result)
+    // Rest of the script...
+
+
+
+private void OnRegisterSuccess(RegisterPlayFabUserResult result)
     {
         Debug.Log("User registration succeeded for " + result.Username);
     }
