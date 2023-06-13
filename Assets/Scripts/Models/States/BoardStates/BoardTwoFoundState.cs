@@ -10,18 +10,15 @@ namespace Memory.Models.States
     {
         public BoardTwoFoundState(MemoryBoard board) : base(board)
         {
-
+            // Increase the score of the active player when two tiles are found
             if (board.Playermodel1.IsActive)
             {
                 board.Playermodel1.Score++;
             }
-
-
-            if (board.Playermodel2.IsActive)
+            else
             {
                 board.Playermodel2.Score++;
             }
-
         }
 
         public override BoardStates State => BoardStates.TwoFound;
@@ -35,7 +32,6 @@ namespace Memory.Models.States
         {
             Board.PreviewingTiles.Remove(tile);
             Board.PreviewingTiles.RemoveAt(0);
-            
 
             if (Board.PreviewingTiles.Count == 0)
             {
@@ -45,10 +41,13 @@ namespace Memory.Models.States
                 }
                 else
                 {
+                    // Switch the active player here
+                    Board.Playermodel1.IsActive = !Board.Playermodel1.IsActive;
+                    Board.Playermodel2.IsActive = !Board.Playermodel2.IsActive;
+
                     Board.State = new BoardNoPreviewState(Board);
                 }
             }
         }
     }
 }
-
