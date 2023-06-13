@@ -19,18 +19,18 @@ namespace Memory.Models
             }
         }
 
-        private int _column;
+        private int _Column;
         public int Column
         {
-            get { return _column; }
+            get { return _Column; }
             set
             {
-                if (_column == value) return;
-                _column = value;
+                if (_Column == value) return;
+                _Column = value;
                 OnPropertyChanged();
             }
         }
-
+     
         private int _memoryCardId;
         public int MemoryCardId
         {
@@ -56,6 +56,7 @@ namespace Memory.Models
         }
 
         private ITileState _state;
+
         public ITileState State
         {
             get { return _state; }
@@ -72,6 +73,7 @@ namespace Memory.Models
             Row = row;
             Column = column;
             MemoryBoard = memoryBoard;
+
             State = new TileHiddenState(this);
         }
 
@@ -80,4 +82,5 @@ namespace Memory.Models
             return $"Tile({Row},{Column})";
         }
     }
+
 }
