@@ -45,11 +45,7 @@ namespace Memory.Models
         private float _elapsed;
         public float Elapsed
         {
-            get
-            {
-                return _elapsed;
-            }
-
+            get { return _elapsed; }
             set
             {
                 if (_elapsed == value) return;
@@ -58,64 +54,14 @@ namespace Memory.Models
             }
         }
 
-        private float _mm;
-        public float Mm
-        {
-            get
-            {
-                return (int) (Elapsed / 60);
-            }
-
-            set
-            {
-                if (_mm == value) return;
-                _mm = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private float _ss;
-        public float Ss
-        {
-            get
-            {
-                return (int)(Elapsed % 60);
-            }
-
-            set
-            {
-                if (_ss == value) return;
-                _ss = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private float _ms;
-        public float Ms
-        {
-            get
-            {
-                return (int)((Elapsed % 1) * 1000);
-            }
-
-            set
-            {
-                if (_ms == value) return;
-                _ms = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public PlayerModel(string name, bool isactive)
+        public PlayerModel(string name, bool isActive)
         {
             Name = name;
             Score = 0;
-            IsActive = isactive;
-
+            IsActive = isActive;
+            Elapsed = 0f;
         }
-
     }
-
 
 }
 

@@ -10,7 +10,6 @@ namespace Memory.Models
 {
     public class MemoryBoard : ModelBaseClass
     {
-        // Fields for storing the number of rows and columns in the game board
         private int _rows;
         public int Rows
         {
@@ -19,7 +18,7 @@ namespace Memory.Models
             {
                 if (_rows == value) return;
                 _rows = value;
-                //OnPropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -31,11 +30,10 @@ namespace Memory.Models
             {
                 if (_columns == value) return;
                 _columns = value;
-                //OnPropertyChanged();
+                OnPropertyChanged();
             }
         }
 
-        // List to store all the tiles on the game board
         private List<Tile> _tiles;
         public List<Tile> Tiles
         {
@@ -44,11 +42,10 @@ namespace Memory.Models
             {
                 if (_tiles == value) return;
                 _tiles = value;
-                //OnPropertyChanged();
+                OnPropertyChanged();
             }
         }
 
-        // List to store the tiles that are currently being previewed
         private List<Tile> _previewingTiles;
         public List<Tile> PreviewingTiles
         {
@@ -57,25 +54,23 @@ namespace Memory.Models
             {
                 if (_previewingTiles == value) return;
                 _previewingTiles = value;
-                //OnPropertyChanged();
+                OnPropertyChanged();
             }
         }
 
-        // Flag indicating if a combination of two matching tiles has been found
         private bool _isCombinationFound;
-
         public bool IsCombinationFound
         {
-            get
+            get { return _isCombinationFound; }
+            set
             {
-                return _isCombinationFound;
-                // If two tiles with the same image are found, return true
+                if (_isCombinationFound == value) return;
+                _isCombinationFound = value;
+                OnPropertyChanged();
             }
         }
 
-        // Current state of the game board
         private IBoardState _state;
-
         public IBoardState State
         {
             get { return _state; }
@@ -87,53 +82,30 @@ namespace Memory.Models
             }
         }
 
-        // Player models representing the two players in the game
-        private PlayerModel _playermodel1;
-        public PlayerModel Playermodel1
-        {
-            get { return _playermodel1; }
-            set
-            {
-                if (_playermodel1 == value) return;
-                _playermodel1 = value;
-                OnPropertyChanged();
-            }
-        }
+        public PlayerModel Playermodel1 { get; set; }
+        public PlayerModel Playermodel2 { get; set; }
 
-        private PlayerModel _playermodel2;
-        public PlayerModel Playermodel2
-        {
-            get { return _playermodel2; }
-            set
-            {
-                if (_playermodel2 == value) return;
-                _playermodel2 = value;
-                OnPropertyChanged();
-            }
-        }
-
-        // Constructor for creating a new MemoryBoard instance
         public MemoryBoard(int rows, int columns, PlayerModel player1, PlayerModel player2)
         {
-            // Set the number of rows and columns
             Rows = rows;
             Columns = columns;
-
-            // Set the player models and their initial properties
             Playermodel1 = player1;
             Playermodel2 = player2;
             Playermodel1.IsActive = true;
             Playermodel2.IsActive = false;
             Playermodel1.Score = 0;
             Playermodel2.Score = 0;
-            Playermodel1.Elapsed = 0f;
-            Playermodel2.Elapsed = 0f;
-
-            // Create lists for storing the tiles
             Tiles = new List<Tile>();
             PreviewingTiles = new List<Tile>();
+            CreateTiles();
+            AssignMemoryCards();
+            AssignMemoryCardIds();
+            ExtensionMethods.Shuffle(Tiles);
+            State = new BoardNoPreviewState(this);
+        }
 
-            // Create tiles for the game board
+        private void CreateTiles()
+        {
             for (int i = 0; i < Rows; i++)
             {
                 for (int j = 0; j < Columns; j++)
@@ -141,54 +113,32 @@ namespace Memory.Models
                     Tiles.Add(new Tile(i, j, this));
                 }
             }
-
-            // Assign memory cards and their IDs to the tiles
-            AssignMemoryCards();
-            AssignMemoryCardIds();
-
-            // Shuffle the tiles
-            ExtensionMethods.Shuffle(Tiles);
-
-            // Set the initial state of the game board to "No Preview"
-            State = new BoardNoPreviewState(this);
         }
 
-        // Assign unique memory card IDs to each tile
         private void AssignMemoryCardIds()
         {
-            // Get the instance of the ImageRepository
             ImageRepository repo = ImageRepository.Instance;
-
-            // Process the image IDs and assign them to the memory cards
-            repo.ProcessImageIds(AssignMemoryCardIds);
-        }
-
-        // Assign unique memory card IDs to each tile based on the available memory card IDs
-        private void AssignMemoryCardIds(List<int> memoryCardIds)
-        {
-            // Shuffle the memory card IDs
-            memoryCardIds = memoryCardIds.Shuffle();
-
-            // Shuffle the tiles
-            List<Tile> shuffledTiles = Tiles.Shuffle();
-
-            int memoryCardIndex = 0;
-            bool first = true;
-
-            foreach (Tile tile in shuffledTiles)
+            repo.ProcessImageIds(memoryCardIds =>
             {
-                tile.MemoryCardId = memoryCardIds[memoryCardIndex];
-                if (first)
-                    first = false;
-                else
+                memoryCardIds.Shuffle();
+                Tiles.Shuffle();
+                int memoryCardIndex = 0;
+                bool first = true;
+
+                foreach (Tile tile in Tiles)
                 {
-                    memoryCardIndex++;
-                    first = true;
+                    tile.MemoryCardId = memoryCardIds[memoryCardIndex];
+                    if (first)
+                        first = false;
+                    else
+                    {
+                        memoryCardIndex++;
+                        first = true;
+                    }
                 }
-            }
+            });
         }
 
-        // Assign memory cards to each tile
         private void AssignMemoryCards()
         {
             for (int i = 0; i < Tiles.Count - 1; i++)
