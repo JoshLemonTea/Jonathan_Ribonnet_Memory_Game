@@ -9,7 +9,7 @@ using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
 
 public class PlayFabAPI : MonoBehaviour
-{ 
+{
     public InputField emailInput; // Reference to the input field in the UI
     public string Email { get; set; } //bound to ifEmail
 
@@ -21,10 +21,10 @@ public class PlayFabAPI : MonoBehaviour
 
     public void Register()
     {
-        string email = emailInput.text; // Get the input value from the input field
+        //string email = emailInput.GetComponent<InputField>().text;  // Get the input value from the input field
         var request = new RegisterPlayFabUserRequest
         {
-            Email = email.Trim(),
+            Email = emailInput.text(),
             Username = "JDA",
             Password = "abc123",
             DisplayName = "IDB"

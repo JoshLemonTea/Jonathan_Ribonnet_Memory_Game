@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: PlayFabEditorPrefsSO
   m_EditorClassIdentifier: 
   DevAccountEmail: jonathan.ribonnet@student.howest.be
-  DevAccountToken: 4tsyn9uyz16uuhusrmnpzt3izfow7mjonqx4jfrk9o17c8nnxjzcrr9izfphjr5dyzzzjyejhuiwnryhwz4441iqiuks7hnkdqyuu7z5br9x3phs3yt51mebomxjtnaikykfswkr5ek41z48f78qyyszmgq6yf13qdnpq6pmdeet4waecff58m7unty997f9sd8sgbup
+  DevAccountToken: waezr9qnuyamnogi78ek3qegnmo1ojehx18hxq8y9e1uud7q86sswn9fgbjm3y4nuj4od3hoext9pn5be6cu4ic914o8ryxteopxg75t6ha9w6x4wj1zbi4t5noug4bbr858dqwn6uxz4hb4kgfmbqyey5m6k9ms8aw55tap43jnmtm76a795ywz47y76xir5nskouaa
   AadAuthorization: 
   SelectedStudio: PD4
   SdkPath: Assets/PlayFabSDK
   EdExPath: 
   LocalCloudScriptPath: 
   PanelIsShown: 0
-  curMainMenuIdx: 3
+  curMainMenuIdx: 0
   curSubMenuIdx: 0
