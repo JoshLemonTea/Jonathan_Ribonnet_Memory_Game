@@ -1,30 +1,19 @@
-using PlayFab;
 using PlayFab.ClientModels;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using UnityEditor.PackageManager.Requests;
+using PlayFab;
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
-using Debug = UnityEngine.Debug;
 
 public class PlayFabAPI : MonoBehaviour
 {
-    public InputField emailInput; // Reference to the input field in the UI
-    public string Email { get; set; } //bound to ifEmail
-
-    #region register
-
-
-
-    // Rest of the script...
+    public TMP_InputField emailInput;
+    public string Email { get; set; }
+    private LoginResult _loginResult;
 
     public void Register()
     {
-        //string email = emailInput.GetComponent<InputField>().text;  // Get the input value from the input field
         var request = new RegisterPlayFabUserRequest
         {
-            Email = emailInput.text(),
+            Email = emailInput.text,
             Username = "JDA",
             Password = "abc123",
             DisplayName = "IDB"
@@ -33,11 +22,7 @@ public class PlayFabAPI : MonoBehaviour
         PlayFabClientAPI.RegisterPlayFabUser(request, OnRegisterSuccess, OnRegisterFailure);
     }
 
-    // Rest of the script...
-
-
-
-private void OnRegisterSuccess(RegisterPlayFabUserResult result)
+    private void OnRegisterSuccess(RegisterPlayFabUserResult result)
     {
         Debug.Log("User registration succeeded for " + result.Username);
     }
@@ -47,17 +32,11 @@ private void OnRegisterSuccess(RegisterPlayFabUserResult result)
         Debug.Log("Registration failed: " + error.ErrorMessage);
     }
 
-    #endregion
-
-    #region login
-
-    private LoginResult _loginResult;
-
     public void Login()
     {
         var request = new LoginWithEmailAddressRequest
         {
-            Email = Email.Trim(),
+            Email = emailInput.text,
             Password = "abc123"
         };
 
@@ -75,102 +54,91 @@ private void OnRegisterSuccess(RegisterPlayFabUserResult result)
         Debug.Log("API call failed: " + error.ErrorMessage);
     }
 
-    #endregion
-
-    #region accountinfo
-
-
-    private void GetAccountInfo()
+    public void GetAccountInfo()
     {
+        if (_loginResult == null)
+        {
+            Debug.Log("Login required before getting account info.");
+            return;
+        }
+
         GetAccountInfoRequest request = new GetAccountInfoRequest { AuthenticationContext = _loginResult.AuthenticationContext };
         PlayFabClientAPI.GetAccountInfo(request, OnGetAccountInfoSuccess, OnAPICallFailure);
     }
-
-
 
     private void OnGetAccountInfoSuccess(GetAccountInfoResult result)
     {
         Debug.Log("GetAccountInfo Success " + result.AccountInfo.Username + result.AccountInfo.TitleInfo.DisplayName);
     }
 
-    #endregion
-
-    #region user inventory
-
-
-
-    private void GetUserInventory()
-
+    public void GetUserInventory()
     {
+        if (_loginResult == null)
+        {
+            Debug.Log("Login required before getting user inventory.");
+            return;
+        }
+
         GetUserInventoryRequest request = new GetUserInventoryRequest { AuthenticationContext = _loginResult.AuthenticationContext };
         PlayFabClientAPI.GetUserInventory(request, OnGetUserInventorySuccess, OnAPICallFailure);
     }
 
-
-
     private void OnGetUserInventorySuccess(GetUserInventoryResult result)
-
     {
-        Debug.Log("inventory: " + result.VirtualCurrency["GO"] + " gold");
-
-        Debug.Log("inventory: items ");
-
+        Debug.Log("Inventory: " + result.VirtualCurrency["GO"] + " gold");
+        Debug.Log("Inventory: items ");
         foreach (ItemInstance ii in result.Inventory)
         {
             Debug.Log(ii.DisplayName);
         }
     }
 
-    #endregion
-
-    #region sponsor
-
     public void IncreasePlayerFunds()
-
     {
+        if (_loginResult == null)
+        {
+            Debug.Log("Login required before increasing player funds.");
+            return;
+        }
 
         AddUserVirtualCurrencyRequest request = new AddUserVirtualCurrencyRequest
+        {
+            AuthenticationContext = _loginResult.AuthenticationContext,
+            Amount = 100,
+            VirtualCurrency = "GO"
+        };
 
-        { AuthenticationContext = _loginResult.AuthenticationContext, Amount = 100, VirtualCurrency = "GO" };
         PlayFabClientAPI.AddUserVirtualCurrency(request, OnAddUserVirtualCurrencySuccess, OnAPICallFailure);
     }
 
-
-
     private void OnAddUserVirtualCurrencySuccess(ModifyUserVirtualCurrencyResult result)
-
     {
-
-        Debug.Log("Add virtual currency succeeded:" + result.Balance);
-
+        Debug.Log("Add virtual currency succeeded: " + result.Balance);
     }
 
-    #endregion
-
     public void PurchaseExcalibur()
-
     {
+        if (_loginResult == null)
+        {
+            Debug.Log("Login required before purchasing Excalibur.");
+            return;
+        }
 
         PurchaseItemRequest request = new PurchaseItemRequest
         {
             AuthenticationContext = _loginResult.AuthenticationContext,
-            CatalogVersion = "PD4",
+            CatalogVersion = "PD4 items",
             ItemId = "PD4.1",
             Price = 100,
             VirtualCurrency = "GO"
         };
 
-
-     PlayFabClientAPI.PurchaseItem(request, OnBuySuccess, OnAPICallFailure);
+        PlayFabClientAPI.PurchaseItem(request, OnBuySuccess, OnAPICallFailure);
     }
-
-
 
     private void OnBuySuccess(PurchaseItemResult result)
     {
         Debug.Log("Purchase succeeded!");
-       
         GetUserInventory();
-
     }
 }
