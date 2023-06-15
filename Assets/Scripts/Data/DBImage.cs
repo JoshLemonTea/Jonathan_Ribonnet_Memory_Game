@@ -11,10 +11,11 @@ namespace Memory.Data
     {
         // Define public properties for the DBImage class
         public int Id { get; set; }
-        public string Name { get; set; }
-        public byte[] MemoryImage { get; set; }
 
-        // Uncommented code line, which is a public field declaration
-        // public bool IsBack = false;
+        public string Name { get; set; } = null!;
+        public byte[] Image1 { get; set; } = null!;
+        public bool IsBack { get; set; }
+
+        
     }
 }

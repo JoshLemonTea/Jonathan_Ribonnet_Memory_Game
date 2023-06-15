@@ -141,39 +141,29 @@ namespace Memory.Models
                     Tiles.Add(new Tile(i, j, this));
                 }
             }
-
-            // Assign memory cards and their IDs to the tiles
-            AssignMemoryCards();
+            //AssignMemoryCards();
             AssignMemoryCardIds();
 
-            // Shuffle the tiles
-            ExtensionMethods.Shuffle(Tiles);
+            //ExtensionMethods.Shuffle(Tiles);
 
-            // Set the initial state of the game board to "No Preview"
             State = new BoardNoPreviewState(this);
         }
 
-        // Assign unique memory card IDs to each tile
         private void AssignMemoryCardIds()
         {
-            // Get the instance of the ImageRepository
             ImageRepository repo = ImageRepository.Instance;
 
-            // Process the image IDs and assign them to the memory cards
             repo.ProcessImageIds(AssignMemoryCardIds);
         }
 
-        // Assign unique memory card IDs to each tile based on the available memory card IDs
         private void AssignMemoryCardIds(List<int> memoryCardIds)
         {
-            // Shuffle the memory card IDs
+            // List<int> memoryCardIds = Enumerable.Range(0, (Tiles.Count + 1) / 2).ToList().Shuffle();
+
             memoryCardIds = memoryCardIds.Shuffle();
-
-            // Shuffle the tiles
             List<Tile> shuffledTiles = Tiles.Shuffle();
-
             int memoryCardIndex = 0;
-            bool first = true;
+            Boolean first = true;
 
             foreach (Tile tile in shuffledTiles)
             {
@@ -186,9 +176,10 @@ namespace Memory.Models
                     first = true;
                 }
             }
+
         }
 
-        // Assign memory cards to each tile
+
         private void AssignMemoryCards()
         {
             for (int i = 0; i < Tiles.Count - 1; i++)
