@@ -10,7 +10,7 @@ namespace Memory.Data
 {
     public class ImageRepository : Singleton<ImageRepository>
     {
-        private string urlMemoryImages = "http://localhost/MemoryWebService/api/image";
+        private string urlMemoryImages = "http://www.pd4memorygame.edu/memoryWebService/api/image";
 
         public void ProcessImageIds(Action<List<int>> processIds)
         {

@@ -50,6 +50,7 @@ namespace Memory.Views
 
                 _ElapsedTime.text = Model.Elapsed.ToString();
             }
+            
         }
 
         private void Update()

@@ -1,4 +1,5 @@
 using Memory.Models; // Import the Memory.Models namespace
+using Memory.Models.States;
 using Memory.Scripts.Utils;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,6 +13,9 @@ namespace Memory.Views
         [SerializeField] private float _tileSpacing = 0.2f; // The spacing between tiles
         [SerializeField] private float sizeX = 1; // The size of the tiles along the X-axis
         [SerializeField] private float sizey = 1; // The size of the tiles along the Y-axis
+        public PlayerView PlayerView1 { get => GameObject.Find("Player1").GetComponent<PlayerView>(); set { PlayerView1 = value; PlayerView1.Model = this.Model.Playermodel1; } }
+
+        public PlayerView PlayerView2 { get => GameObject.Find("Player2").GetComponent<PlayerView>(); set { PlayerView2 = value; PlayerView2.Model = this.Model.Playermodel1; } }
 
         public MemoryBoardView()
         {
@@ -19,7 +23,13 @@ namespace Memory.Views
 
         protected override void Model_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            throw new System.NotImplementedException();
+
+            
+            if(Model.State.State == BoardStates.Finished)
+            {
+                PlayerView1.Model.IsActive = false;
+                PlayerView2.Model.IsActive = false;
+            }
         }
 
         public void SetUpMemoryBoardView(MemoryBoard model, GameObject Tileprefab, Material[] mats, PlayerView player1View, PlayerView player2View)

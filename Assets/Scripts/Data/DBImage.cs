@@ -16,6 +16,7 @@ namespace Memory.Data
         public byte[] Image1 { get; set; } = null!;
         public bool IsBack { get; set; }
 
+
         
     }
 }
