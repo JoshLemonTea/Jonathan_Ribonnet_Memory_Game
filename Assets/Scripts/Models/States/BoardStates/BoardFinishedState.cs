@@ -10,6 +10,8 @@ namespace Memory.Models.States
     {
         public BoardFinishedState(MemoryBoard board) : base(board)
         {
+            board.Playermodel1.IsActive = false;
+            board.Playermodel2.IsActive = false;
         }
 
         public override BoardStates State => BoardStates.Finished;

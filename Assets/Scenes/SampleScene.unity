@@ -561,6 +561,10 @@ PrefabInstance:
       propertyPath: m_Alpha
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6572969056647595743, guid: c8f9038ca0c900146b870ec4e735f643, type: 3}
+      propertyPath: m_FontData.m_MinSize
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6837874267357568758, guid: c8f9038ca0c900146b870ec4e735f643, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -746,13 +750,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3407477000882908444, guid: 9de98cbe3827bac4aa457d788c9932b9, type: 3}
+      propertyPath: m_FontData.m_MinSize
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5088263876699355343, guid: 9de98cbe3827bac4aa457d788c9932b9, type: 3}
       propertyPath: m_Text
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6887371971880244202, guid: 9de98cbe3827bac4aa457d788c9932b9, type: 3}
-      propertyPath: m_Alpha
-      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8477800013018102508, guid: 9de98cbe3827bac4aa457d788c9932b9, type: 3}
       propertyPath: m_Name

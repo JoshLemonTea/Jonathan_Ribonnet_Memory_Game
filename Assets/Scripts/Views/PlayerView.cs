@@ -29,13 +29,13 @@ namespace Memory.Views
             {
                 // If the IsActive property changes, toggle the alpha value of the player text
 
-                if (_playerText.alpha == 0.5f)
+                if (_playerText.alpha == 0.1f)
                 {
                     _playerText.alpha = 1f;
                 }
                 else
                 {
-                    _playerText.alpha = 0.5f;
+                    _playerText.alpha = 0.1f;
                 }
             }
             if (e.PropertyName.Equals(nameof(Model.Score)))

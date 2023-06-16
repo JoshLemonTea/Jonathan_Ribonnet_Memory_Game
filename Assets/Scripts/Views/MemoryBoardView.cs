@@ -1,10 +1,10 @@
-using Memory.Models; // Import the Memory.Models namespace
-using Memory.Models.States;
-using Memory.Scripts.Utils;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
+using Memory.Models;
+using Memory.Models.States;
+using Memory.Scripts.Utils;
 
 namespace Memory.Views
 {
@@ -13,9 +13,8 @@ namespace Memory.Views
         [SerializeField] private float _tileSpacing = 0.2f; // The spacing between tiles
         [SerializeField] private float sizeX = 1; // The size of the tiles along the X-axis
         [SerializeField] private float sizey = 1; // The size of the tiles along the Y-axis
-        public PlayerView PlayerView1 { get => GameObject.Find("Player1").GetComponent<PlayerView>(); set { PlayerView1 = value; PlayerView1.Model = this.Model.Playermodel1; } }
-
-        public PlayerView PlayerView2 { get => GameObject.Find("Player2").GetComponent<PlayerView>(); set { PlayerView2 = value; PlayerView2.Model = this.Model.Playermodel1; } }
+        public PlayerView PlayerView1 { get; set; }
+        public PlayerView PlayerView2 { get; set; }
 
         public MemoryBoardView()
         {
@@ -24,12 +23,6 @@ namespace Memory.Views
         protected override void Model_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
 
-            
-            if(Model.State.State == BoardStates.Finished)
-            {
-                PlayerView1.Model.IsActive = false;
-                PlayerView2.Model.IsActive = false;
-            }
         }
 
         public void SetUpMemoryBoardView(MemoryBoard model, GameObject Tileprefab, Material[] mats, PlayerView player1View, PlayerView player2View)
@@ -52,8 +45,10 @@ namespace Memory.Views
             }
 
             // Set the models of the player views
-            player1View.Model = model.Playermodel1;
-            player2View.Model = model.Playermodel2;
+            PlayerView1 = player1View;
+            PlayerView2 = player2View;
+            PlayerView1.Model = model.Playermodel1;
+            PlayerView2.Model = model.Playermodel2;
         }
     }
 }
